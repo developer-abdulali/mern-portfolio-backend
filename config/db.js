@@ -1,20 +1,17 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const dbConnection = () => {
+  const MONGO_URI = process.env.MONGODB_URI;
+
+  if (!MONGO_URI) {
+    console.error("Error: MongoDB URI is not defined");
+    process.exit(1);
+  }
+
   mongoose
-    .connect(process.env.MONGODB_URI, {
-      dbName: "PORTFOLIO",
-      serverSelectionTimeoutMS: 30000,
-    })
-    .then(() => {
-      console.log("Connected to MongoDB");
-    })
-    .catch((err) => {
-      console.error("Failed to connect to MongoDB", err);
-    });
+    .connect(MONGO_URI)
+    .then(() => console.log("MongoDB connected"))
+    .catch((err) => console.error("MongoDB connection error:", err));
 };
 
 export default dbConnection;
